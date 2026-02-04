@@ -8,6 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   controllers: [AppController, PrismaController],
   providers: [AppService],
-  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env.dev", }), PrismaModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env", }), PrismaModule],
 })
 export class AppModule { }
