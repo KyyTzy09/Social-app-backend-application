@@ -28,7 +28,7 @@ export class AuthService {
         if (!comparePassword) throw new BadRequestException("Incorrect password")
 
         const payload = { userId: existingUser.userId }
-        const token = await this.jwtService.signAsync(payload, { secret: this.configService.get("JWT_SECRET") })
+        const token = await this.jwtService.signAsync(payload, { secret: this.configService.get<string>("JWT_SECRET") })
 
         return { accessToken: token }
     }
