@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { PrismaController } from './modules/prisma/prisma.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [AppController, PrismaController],
   providers: [AppService],
-  imports: [PrismaModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env.dev", }), PrismaModule],
 })
-export class AppModule {}
+export class AppModule { }
