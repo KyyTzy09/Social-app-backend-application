@@ -9,6 +9,14 @@ import { ApiResponseType } from 'src/shared/types/response.type';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
+  @Get("/")
+  @UseGuards(AuthGuard)
+  async GetAllUsers(): Promise<ApiResponseType<Partial<User>[]>> {
+    const result = await this.userService.getAllUsers()
+
+    return { message: "Users retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
+  }
+
   @Get("session")
   @UseGuards(AuthGuard)
   async GetSession(@Req() req: ReqUserType): Promise<ApiResponseType<Partial<User>>> {
