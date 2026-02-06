@@ -18,6 +18,28 @@ model User {
   email    String  @unique
   password String? @db.Text
 
+  profile Profile?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  userId      String      @id
+  username    String?
+  avatar      String?     @default("https://i.pinimg.com/736x/09/7d/3c/097d3cf1d036e549d1caa10ad9268dfe.jpg") @db.Text
+  info        String?     @default("Pengguna ini belum menambahkan info") @db.Text
+  gender      UserGender?
+  dateOfBirth DateTime?
+
+  user User @relation(references: [userId], fields: [userId], onUpdate: Cascade, onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserGender {
+  MAN
+  WOMAN
+  OTHER
 }
