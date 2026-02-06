@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { UserGender } from "@prisma/client";
 
 @Injectable()
 export class UserRepository {
@@ -24,6 +25,23 @@ export class UserRepository {
                 fullName,
                 email,
                 password
+            }
+        })
+    }
+
+    async createUserWithProfile(fullName: string, email: string, password: string, dob: Date, gender: UserGender) {
+        return await this.prisma.user.create({
+            data: {
+                fullName,
+                email,
+                password,
+                profile: {
+                    create: {
+                        username: fullName,
+                        gender,
+                        dateOfBirth: dob,
+                    }
+                }
             }
         })
     }

@@ -15,7 +15,7 @@ export class AuthService {
         if (existingUser) throw new NotFoundException("User is already registered")
 
         const hashedPassword = await HashText(dto.password)
-        const createdUser = await this.userRepo.createUser(dto.fullName, dto.email, hashedPassword)
+        const createdUser = await this.userRepo.createUserWithProfile(dto.fullName, dto.email, hashedPassword, dto.dateOfBirth, dto.gender)
 
         return { data: createdUser }
     }
