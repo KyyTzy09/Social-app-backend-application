@@ -6,6 +6,24 @@ import { UserGender } from "@prisma/client";
 export class UserRepository {
     constructor(private readonly prisma: PrismaService) { }
 
+    async findById(userId: string) {
+        return await this.prisma.user.findUnique({
+            where: {
+                userId
+            },
+            include: {
+                profile: {
+                    omit: {
+                        userId: true
+                    }
+                }
+            },
+            omit: {
+                password: true
+            }
+        })
+    }
+
     async findByEmail(email: string) {
         return await this.prisma.user.findUnique({
             where: {
