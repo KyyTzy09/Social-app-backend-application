@@ -1,6 +1,9 @@
 import { Controller, Get, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { ReqUserType } from 'src/shared/types/req-user.type';
+import { User } from '@prisma/client';
+import { ApiResponseType } from 'src/shared/types/response.type';
 
 @Controller('user')
 export class UserController {
@@ -8,7 +11,7 @@ export class UserController {
 
   @Get("session")
   @UseGuards(AuthGuard)
-  async GetSession(@Req() req: { user: { userId: string } }) {
+  async GetSession(@Req() req: ReqUserType): Promise<ApiResponseType<Partial<User>>> {
     const userId = req.user.userId
     const result = await this.userService.getSession({ userId })
 
