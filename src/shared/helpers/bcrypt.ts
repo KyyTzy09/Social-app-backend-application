@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import * as bcrypt from "bcrypt"
 
 export async function HashText(raw: string): Promise<string> {
     var hashedRaw = await bcrypt.hash(raw, 10)

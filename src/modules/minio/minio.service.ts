@@ -2,7 +2,7 @@ import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common
 import * as Minio from "minio"
 import { minioConfig } from "src/shared/constants/minio";
 import { UploaderDto } from "./dto/upload.dto";
-import path from "path";
+import * as path from "path";
 import { randomUUID } from "crypto";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class MinioService {
             const url = `${minioConfig.minioBaseURL}/${minioConfig.minioBucket}/${objectName}`;
             return url
         } catch (err) {
-            throw new InternalServerErrorException('Failed to upload media');
+            throw new InternalServerErrorException(err.message);
         }
     }
 }
