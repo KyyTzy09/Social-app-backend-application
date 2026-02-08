@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponseType } from 'src/shared/types/response.type';
@@ -9,6 +9,13 @@ import { ReqUserType } from 'src/shared/types/req-user.type';
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) { }
+
+  @Get("/")
+  @UseGuards(AuthGuard)
+  async GetUserProfile(@Req() req: ReqUserType): Promise<ApiResponseType<Profile>> {
+    const result = await this.profileService.getUserProfile({ userId: req.user.userId })
+    return { message: "Profile retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
+  }
 
   @Post("upload-avatar")
   @UseGuards(AuthGuard)
