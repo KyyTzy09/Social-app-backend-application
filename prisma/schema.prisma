@@ -23,6 +23,9 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([fullName])
 }
 
 model Profile {
@@ -37,6 +40,8 @@ model Profile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([username])
 }
 
 model Post {
@@ -50,6 +55,9 @@ model Post {
 
   postedAt DateTime @default(now())
   editedAt DateTime @updatedAt
+
+  @@unique([senderId, postId])
+  @@index([postId])
 }
 
 enum UserGender {
