@@ -19,6 +19,7 @@ model User {
   password String? @db.Text
 
   profile Profile?
+  posts   Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,6 +37,19 @@ model Profile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  postId      String  @id @default(ulid())
+  title       String
+  description String? @db.Text
+  contentUrl  String? @db.Text
+
+  senderId String
+  sender   User   @relation(references: [userId], fields: [senderId], onUpdate: Cascade, onDelete: Cascade)
+
+  postedAt DateTime @default(now())
+  editedAt DateTime @updatedAt
 }
 
 enum UserGender {
