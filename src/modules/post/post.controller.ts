@@ -18,6 +18,13 @@ export class PostController {
     return { message: "posts retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
   }
 
+  @Get("user")
+  @UseGuards(AuthGuard)
+  async GetUserPost(@Req() req: ReqUserType): Promise<ApiResponseType<Partial<PostType>[]>> {
+    const result = await this.postService.getUserPost({ userId: req.user.userId })
+    return { message: "Post retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
+  }
+
   @Post("create")
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)

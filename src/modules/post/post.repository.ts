@@ -28,6 +28,32 @@ export class PostRepository {
         })
     }
 
+    async getUserPost(userId: string) {
+        return await this.prisma.post.findMany({
+            where: {
+                senderId: userId
+            },
+            select: {
+                postId: true,
+                title: true,
+                description: true,
+                contentUrl: true,
+                postedAt: true,
+                editedAt: true,
+                sender: {
+                    omit: {
+                        password: true,
+                        createdAt: true,
+                        updatedAt: true
+                    }
+                }
+            },
+            orderBy: {
+                postedAt: "desc"
+            }
+        })
+    }
+
     async createPost(userId: string, title: string, description: string, contentUrl: string) {
         return await this.prisma.post.create({
             data: {
