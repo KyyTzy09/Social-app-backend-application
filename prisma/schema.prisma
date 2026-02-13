@@ -60,6 +60,13 @@ model Post {
   @@index([postId])
 }
 
+model Category {
+  categoryId String @id @default(ulid())
+  name       String @unique
+
+  @@index([categoryId])
+}
+
 enum UserGender {
   MAN
   WOMAN
