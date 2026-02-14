@@ -9,6 +9,10 @@ export class CategoryRepository {
         return await this.prisma.category.count()
     }
 
+    async findAll() {
+        return await this.prisma.category.findMany()
+    }
+
     async findAllWithPagination(skip: number, limit: number) {
         return this.prisma.category.findMany({
             skip,

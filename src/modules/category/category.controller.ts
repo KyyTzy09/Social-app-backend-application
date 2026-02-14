@@ -1,6 +1,7 @@
 import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { ApiResponseType } from 'src/shared/types/response.type';
+import { Category } from '@prisma/client';
 
 @Controller('category')
 export class CategoryController {
@@ -12,5 +13,9 @@ export class CategoryController {
     return { message: "Categories data retrieved successfully", statusCode: HttpStatus.OK, data: result.data, pagination: { page, limit, maxPage: result.maxPage } }
   }
 
-  
+  @Get("/all")
+  async GetAllCategories(): Promise<ApiResponseType<Category[]>> {
+    const result = await this.categoryService.getAllCategories()
+    return { message: "Categories data retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
+  }
 }

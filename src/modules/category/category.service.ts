@@ -15,4 +15,11 @@ export class CategoryService {
 
         return { data: existingCategories, maxPage: Math.ceil(rowCounts / dto.limit) }
     }
+
+    async getAllCategories() {
+        const existingCategories = await this.categoryRepo.findAll()
+        if (existingCategories.length === 0) throw new NotFoundException("Categories not found")
+
+        return { data: existingCategories }
+    }
 }
