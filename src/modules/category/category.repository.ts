@@ -26,4 +26,14 @@ export class CategoryRepository {
             take: limit
         })
     }
+
+    async createPostCategories(postId: string, categoriesId: string[]) {
+        return await this.prisma.postCategory.createMany({
+            data: categoriesId.map((id) => ({
+                categoryId: id,
+                postId
+            })),
+            skipDuplicates: true
+        })
+    }
 }

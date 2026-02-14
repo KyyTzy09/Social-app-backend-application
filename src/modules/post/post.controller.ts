@@ -30,7 +30,7 @@ export class PostController {
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor("content"))
   async CreatePost(@Req() req: ReqUserType, @UploadedFile() content: Express.Multer.File, @Body() dto: CreatePostDto): Promise<ApiResponseType<PostType>> {
-    const result = await this.postService.createPost({ userId: req.user.userId, title: dto.title, description: dto.description, content })
+    const result = await this.postService.createPost({ userId: req.user.userId, title: dto.title, description: dto.description, content, categoriesId: dto.categoriesId })
 
     return { message: "Post created successfully", statusCode: HttpStatus.CREATED, data: result.data }
   }

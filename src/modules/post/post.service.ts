@@ -4,10 +4,11 @@ import { CreatePostDto } from './dto/createPost.dto';
 import { UserRepository } from '../user/user.repository';
 import { MinioService } from '../minio/minio.service';
 import { GetUserPost } from './dto/getUserPosr.dto';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class PostService {
-    constructor(private readonly postRepo: PostRepository, private readonly userRepo: UserRepository, private readonly minioService: MinioService) { }
+    constructor(private readonly postRepo: PostRepository, private readonly userRepo: UserRepository, private readonly minioService: MinioService, private readonly categoryService: CategoryService) { }
 
     async getAllPosts() {
         const existingPosts = await this.postRepo.getAll()
@@ -33,6 +34,7 @@ export class PostService {
         const uploadedContent = await this.minioService.Uploader({ file: dto.content, directory: "post" })
         const createdPost = await this.postRepo.createPost(dto.userId, dto.title, dto.description, uploadedContent)
 
+        await this.categoryService.createPostCategories(createdPost.postId, dto.categoriesId)
         return { data: createdPost }
     }
 }

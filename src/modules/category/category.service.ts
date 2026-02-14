@@ -22,4 +22,8 @@ export class CategoryService {
 
         return { data: existingCategories }
     }
+
+    async createPostCategories(postId: string, categoriesId: string[]) {
+        const createdPostCategories = await this.categoryRepo
+     }
 }

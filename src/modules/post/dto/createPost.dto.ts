@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export class CreatePostDto {
     @IsString()
@@ -16,4 +16,8 @@ export class CreatePostDto {
 
     @IsOptional()
     content: Express.Multer.File
+
+    @IsArray()
+    @IsNotEmpty()
+    categoriesId: string[]
 }
