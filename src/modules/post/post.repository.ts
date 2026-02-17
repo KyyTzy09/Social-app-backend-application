@@ -5,6 +5,14 @@ import { PrismaService } from "../prisma/prisma.service";
 export class PostRepository {
     constructor(private readonly prisma: PrismaService) { }
 
+    async getById(postId: string) {
+        return await this.prisma.post.findUnique({
+            where: {
+                postId
+            }
+        })
+    }
+
     async getAll() {
         return await this.prisma.post.findMany({
             select: {
@@ -61,6 +69,18 @@ export class PostRepository {
                 title,
                 description,
                 contentUrl
+            }
+        })
+    }
+
+    async updatePost(postId: string, title: string, description: string) {
+        return await this.prisma.post.update({
+            where: {
+                postId
+            },
+            data: {
+                title,
+                description
             }
         })
     }

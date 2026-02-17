@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PostRepository } from './post.repository';
 import { CreatePostDto } from './dto/createPost.dto';
 import { UserRepository } from '../user/user.repository';
 import { MinioService } from '../minio/minio.service';
 import { GetUserPost } from './dto/getUserPosr.dto';
 import { CategoryService } from '../category/category.service';
+import { UpdatePostDto } from './dto/updatePost.dto';
 
 @Injectable()
 export class PostService {
@@ -36,5 +37,17 @@ export class PostService {
 
         await this.categoryService.createPostCategories(createdPost.postId, dto.categoriesId)
         return { data: createdPost }
+    }
+
+    async updatePost(dto: UpdatePostDto) {
+        const isOwner = await this.userRepo.findById(dto.userId)
+        if (!isOwner) throw new ForbiddenException("You is not an owner this post")
+
+        const existingPost = await this.postRepo.getById(dto.postId)
+        if (!existingPost) throw new NotFoundException("Post not found")
+
+        const updatedPost = await this.postRepo.updatePost(dto.postId, dto.title, dto.description)
+
+        return { data: updatedPost }
     }
 }
