@@ -84,4 +84,12 @@ export class PostRepository {
             }
         })
     }
+
+    async deleteById(postId: string) {
+        return await this.prisma.post.delete({
+            where: {
+                postId
+            }
+        })
+    }
 }

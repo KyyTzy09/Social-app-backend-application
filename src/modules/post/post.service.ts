@@ -6,6 +6,7 @@ import { MinioService } from '../minio/minio.service';
 import { GetUserPost } from './dto/getUserPosr.dto';
 import { CategoryService } from '../category/category.service';
 import { UpdatePostDto } from './dto/updatePost.dto';
+import { DeletePostDto } from './dto/deletePost.dto';
 
 @Injectable()
 export class PostService {
@@ -49,5 +50,16 @@ export class PostService {
         const updatedPost = await this.postRepo.updatePost(dto.postId, dto.title, dto.description)
 
         return { data: updatedPost }
+    }
+
+    async deletePost(dto: DeletePostDto) {
+        const isOwner = await this.userRepo.findById(dto.userId)
+        if (!isOwner) throw new ForbiddenException("You is not an owner this post")
+
+        const existingPost = await this.postRepo.getById(dto.postId)
+        if (!existingPost) throw new NotFoundException("Post not found")
+
+        const deletedPost = await this.postRepo.deleteById(dto.postId)
+        return { data: deletedPost }
     }
 }
