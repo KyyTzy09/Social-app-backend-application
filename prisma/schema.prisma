@@ -47,13 +47,18 @@ model Profile {
 }
 
 model UserInterest {
-  userId String @id
+  userId String
   user   User   @relation(fields: [userId], references: [userId])
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [categoryId])
 
   score Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, categoryId])
 }
 
 model Post {
