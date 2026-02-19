@@ -18,6 +18,89 @@ model User {
   email    String  @unique
   password String? @db.Text
 
+  IsFirstLogin Boolean  @default(false)
+  profile      Profile?
+  posts        Post[]
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  userInterests UserInterest[]
+
+  @@index([userId])
+  @@index([fullName])
+}
+
+model Profile {
+  userId      String      @id
+  username    String?
+  avatar      String?     @default("https://i.pinimg.com/736x/09/7d/3c/097d3cf1d036e549d1caa10ad9268dfe.jpg") @db.Text
+  info        String?     @default("Pengguna ini belum menambahkan info") @db.Text
+  gender      UserGender?
+  dateOfBirth DateTime?
+
+  user User @relation(references: [userId], fields: [userId], onUpdate: Cascade, onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([username])
+}
+
+model UserInterest {
+  userId String
+  user   User   @relation(fields: [userId], references: [userId])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [categoryId])
+
+  score Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, categoryId])
+}
+
+model Post {
+  postId      String  @id @default(ulid())
+  title       String
+  description String? @db.Text
+  contentUrl  String? @db.Text
+
+  senderId String
+  sender   User   @relation(references: [userId], fields: [senderId], onUpdate: Cascade, onDelete: Cascade)
+
+  postedAt DateTime @default(now())
+  editedAt DateTime @updatedAt
+
+  categories PostCategory[]
+
+  @@unique([senderId, postId])
+  @@index([postId])
+}
+
+model PostCategory {
+  categoryId String @unique
+  postId     String @unique
+
+  post     Post     @relation(fields: [postId], references: [postId], onUpdate: Cascade, onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [categoryId], onUpdate: Cascade, onDelete: Cascade)
+
+  @@unique([postId, categoryId])
+}
+
+model Category {
+  categoryId String @id @default(ulid())
+  name       String @unique
+
+  postCategories PostCategory[]
+  userInterests  UserInterest[]
+
+  @@index([categoryId])
+}
+
+enum UserGender {
+  MAN
+  WOMAN
+  OTHER
 }

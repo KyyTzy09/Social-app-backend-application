@@ -1,9 +1,46 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { UserGender } from "@prisma/client";
 
 @Injectable()
 export class UserRepository {
     constructor(private readonly prisma: PrismaService) { }
+
+    async findAll() {
+        return await this.prisma.user.findMany({
+            omit: {
+                password: true
+            },
+            include: {
+                profile: {
+                    omit: {
+                        userId: true
+                    }
+                }
+            },
+            orderBy: {
+                fullName: "desc",
+            }
+        })
+    }
+
+    async findById(userId: string) {
+        return await this.prisma.user.findUnique({
+            where: {
+                userId
+            },
+            include: {
+                profile: {
+                    omit: {
+                        userId: true
+                    }
+                }
+            },
+            omit: {
+                password: true
+            }
+        })
+    }
 
     async findByEmail(email: string) {
         return await this.prisma.user.findUnique({
@@ -24,6 +61,23 @@ export class UserRepository {
                 fullName,
                 email,
                 password
+            }
+        })
+    }
+
+    async createUserWithProfile(fullName: string, email: string, password: string, dob: Date, gender: UserGender) {
+        return await this.prisma.user.create({
+            data: {
+                fullName,
+                email,
+                password,
+                profile: {
+                    create: {
+                        username: fullName,
+                        gender,
+                        dateOfBirth: dob,
+                    }
+                }
             }
         })
     }
