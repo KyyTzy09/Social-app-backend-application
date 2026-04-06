@@ -7,16 +7,18 @@ import { GetUserPost } from './dto/getUserPosr.dto';
 import { CategoryService } from '../category/category.service';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { DeletePostDto } from './dto/deletePost.dto';
+import { GetPostPagination } from './dto/getPostPagination';
 
 @Injectable()
 export class PostService {
     constructor(private readonly postRepo: PostRepository, private readonly userRepo: UserRepository, private readonly minioService: MinioService, private readonly categoryService: CategoryService) { }
 
-    async getAllPosts() {
-        const existingPosts = await this.postRepo.getAll()
+    async getAllPosts(dto: GetPostPagination) {
+        const skip = (dto.page - 1) * dto.limit
+        const existingPosts = await this.postRepo.getAllPostWithPagination(dto.limit, skip)
         if (existingPosts.length === 0) throw new NotFoundException("Post not founds")
 
-        return { data: existingPosts }
+        return { data: existingPosts, page: dto.page, limit: dto.limit }
     }
 
     async getUserPost(dto: GetUserPost) {

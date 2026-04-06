@@ -4,7 +4,7 @@ import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ReqUserType } from 'src/shared/types/req-user.type';
 import { User } from '@prisma/client';
 import { ApiResponseType } from 'src/shared/types/response.type';
-import { CreateUserInterestDto } from './dto/createUserIntrerest.dto';
+import { CreateUserInterestDto } from './dto/createUserInterest.dto';
 
 @Controller('user')
 export class UserController {
