@@ -7,6 +7,5 @@ export class CreateUserInterestDto {
 
     @IsArray()
     @IsNotEmpty()
-    @MinLength(1)
     categoriesId: string[]
 }
