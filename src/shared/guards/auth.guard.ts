@@ -8,10 +8,6 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService, private configService: ConfigService) { }
 
   private extractTokenFromCookies(req: Request): string | undefined {
-    if (!req.headers.authorization || !(req.headers.authorization as string).startsWith('Bearer ')) {
-      throw new HttpException("Token tidak ada", HttpStatus.FORBIDDEN)
-    }
-
     const token = req.cookies["accessToken"]
     return token || undefined
   }

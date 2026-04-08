@@ -22,9 +22,10 @@ export class AuthController {
     const result = await this.authService.Login(dto)
     res.cookie("accessToken", result.accessToken, {
       httpOnly: true,
+      path: "/",
+      sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      maxAge: 24 * 60 * 60 * 1000
     })
 
     return { message: "Login successfully", statusCode: HttpStatus.OK, accessToken: result.accessToken }
