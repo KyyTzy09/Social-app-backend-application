@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { PostService } from './post.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ReqUserType } from 'src/shared/types/req-user.type';
@@ -14,8 +14,8 @@ export class PostController {
 
   @Get("/")
   @UseGuards(AuthGuard)
-  async GetAllPosts(): Promise<ApiResponseType<Partial<PostType>[]>> {
-    const result = await this.postService.getAllPosts()
+  async GetAllPosts(@Query("page") page: number, @Query("limit") limit: number): Promise<ApiResponseType<Partial<PostType>[]>> {
+    const result = await this.postService.getAllPosts({ page, limit })
     return { message: "posts retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
   }
 

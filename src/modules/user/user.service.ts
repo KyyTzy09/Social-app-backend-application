@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { GetSessionDto } from './dto/getSession.dto';
-import { CreateUserInterestDto } from './dto/createUserIntrerest.dto';
+import { CreateUserInterestDto } from './dto/createUserInterest.dto';
 import { UserInterestRepository } from './userInterest.repository';
 
 @Injectable()

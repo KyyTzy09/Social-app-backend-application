@@ -9,7 +9,7 @@ export class CategoryController {
 
   @Get("/")
   async GetCategoriesWithPagination(@Query("page") page: number, @Query("limit") limit: number) {
-    const result = await this.categoryService.getCategoriesWithPagination({ page, limit })
+    const result = await this.categoryService.getCategoriesWithPagination({ page: page | 1, limit: limit | 10 })
     return { message: "Categories data retrieved successfully", statusCode: HttpStatus.OK, data: result.data, pagination: { page, limit, maxPage: result.maxPage } }
   }
 

@@ -7,18 +7,14 @@ import { Request } from 'express';
 export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService, private configService: ConfigService) { }
 
-  private extractTokenFromHeader(req: Request): string | undefined {
-    if (!req.headers.authorization || !(req.headers.authorization as string).startsWith('Bearer ')) {
-      throw new HttpException("Token tidak ada", HttpStatus.FORBIDDEN)
-    }
-
-    const token = req.headers.authorization.split(" ")[1]
+  private extractTokenFromCookies(req: Request): string | undefined {
+    const token = req.cookies["accessToken"]
     return token || undefined
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()
-    const token = this.extractTokenFromHeader(request)
+    const token = this.extractTokenFromCookies(request)
     if (!token) throw new UnauthorizedException("Access token not found")
 
     try {

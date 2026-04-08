@@ -36,6 +36,31 @@ export class PostRepository {
         })
     }
 
+    async getAllPostWithPagination(take: number, skip: number) {
+        return await this.prisma.post.findMany({
+            select: {
+                postId: true,
+                title: true,
+                description: true,
+                contentUrl: true,
+                postedAt: true,
+                editedAt: true,
+                sender: {
+                    omit: {
+                        password: true,
+                        createdAt: true,
+                        updatedAt: true
+                    }
+                }
+            },
+            take,
+            skip,
+            orderBy: {
+                postedAt: "desc"
+            }
+        })
+    }
+
     async getUserPost(userId: string) {
         return await this.prisma.post.findMany({
             where: {
