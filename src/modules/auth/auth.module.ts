@@ -4,10 +4,11 @@ import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, GoogleStrategy],
   imports: [PrismaModule, UserModule, JwtModule.register({ global: true, signOptions: { expiresIn: '1d' } })]
 })
 export class AuthModule { }
