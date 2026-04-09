@@ -20,6 +20,7 @@ export class UserController {
 
   @Get("session")
   @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
   async GetSession(@Req() req: ReqUserType): Promise<ApiResponseType<Partial<User>>> {
     const userId = req.user.userId
     const result = await this.userService.getSession({ userId })

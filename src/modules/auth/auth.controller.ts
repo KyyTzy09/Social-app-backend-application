@@ -18,6 +18,7 @@ export class AuthController {
   }
 
   @Post("login")
+  @HttpCode(HttpStatus.OK)
   async Login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response): Promise<{ message: string, statusCode: number, accessToken: string }> {
     const result = await this.authService.Login(dto)
     res.cookie("accessToken", result.accessToken, {
