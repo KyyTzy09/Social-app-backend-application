@@ -3,3 +3,9 @@ export interface ReqUserType extends Request {
         userId: string
     }
 }
+
+export interface IUserGoogleRequest {
+    email: string;
+    name: string;
+    avatar: string
+}

@@ -60,7 +60,35 @@ export class UserRepository {
             data: {
                 fullName,
                 email,
-                password
+                password,
+            }
+        })
+    }
+
+    async upsertUser(fullName: string, email: string, avatar: string) {
+        return await this.prisma.user.upsert({
+            where: {
+                email,
+            },
+            create: {
+                email,
+                fullName,
+                profile: {
+                    create: {
+                        avatar,
+                        username: fullName
+                    }
+                }
+            },
+            update: {
+                email,
+                fullName,
+                profile: {
+                    update: {
+                        avatar,
+                        username: fullName
+                    }
+                }
             }
         })
     }

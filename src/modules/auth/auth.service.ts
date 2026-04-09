@@ -5,6 +5,8 @@ import { CompareText, HashText } from 'src/shared/helpers/bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Profile } from 'passport-google-oauth20';
+import { IUserGoogleRequest } from 'src/shared/types/req-user.type';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +32,14 @@ export class AuthService {
         const payload = { userId: existingUser.userId }
         const token = await this.jwtService.signAsync(payload, { secret: this.configService.get<string>("JWT_SECRET") })
 
+        return { accessToken: token }
+    }
+
+
+    public async LoginWithGoogle(payload: IUserGoogleRequest) {
+        const user = await this.userRepo.upsertUser(payload.name, payload.email, payload.avatar)
+        const payloadJWT = { userId: user.userId }
+        const token = await this.jwtService.signAsync(payloadJWT, { secret: this.configService.get<string>("JWT_SECRET") })
         return { accessToken: token }
     }
 }
