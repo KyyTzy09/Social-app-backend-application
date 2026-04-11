@@ -15,7 +15,7 @@ export class PostController {
   @Get("/")
   @UseGuards(AuthGuard)
   async GetAllPosts(@Query("page") page: number, @Query("limit") limit: number): Promise<ApiResponseType<Partial<PostType>[]>> {
-    const result = await this.postService.getAllPosts({ page, limit })
+    const result = await this.postService.getAllPosts({ page: page || 1, limit: limit || 10 })
     return { message: "posts retrieved successfully", statusCode: HttpStatus.OK, data: result.data }
   }
 

@@ -8,17 +8,27 @@ import { CategoryService } from '../category/category.service';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { DeletePostDto } from './dto/deletePost.dto';
 import { GetPostPagination } from './dto/getPostPagination';
+import { Post } from '@prisma/client';
 
 @Injectable()
 export class PostService {
     constructor(private readonly postRepo: PostRepository, private readonly userRepo: UserRepository, private readonly minioService: MinioService, private readonly categoryService: CategoryService) { }
-
     async getAllPosts(dto: GetPostPagination) {
         const skip = (dto.page - 1) * dto.limit
         const existingPosts = await this.postRepo.getAllPostWithPagination(dto.limit, skip)
         if (existingPosts.length === 0) throw new NotFoundException("Post not founds")
 
-        return { data: existingPosts, page: dto.page, limit: dto.limit }
+        const postsWithCategories = existingPosts.map(post => ({
+            postId: post.postId,
+            title: post.title,
+            description: post.description,
+            contentUrl: post.contentUrl,
+            postedAt: post.postedAt,
+            editedAt: post.editedAt,
+            sender: post.sender,
+            categories: post.categories.map(category => ({ categoryId: category.category.categoryId, name: category.category.name })),
+        }))
+        return { data: postsWithCategories, page: dto.page, limit: dto.limit }
     }
 
     async getUserPost(dto: GetUserPost) {

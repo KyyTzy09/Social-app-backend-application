@@ -46,10 +46,24 @@ export class PostRepository {
                 postedAt: true,
                 editedAt: true,
                 sender: {
+                    include: {
+                        profile: {
+                            select: {
+                                avatar: true,
+                                username: true
+                            }
+                        }
+                    },
                     omit: {
                         password: true,
                         createdAt: true,
-                        updatedAt: true
+                        updatedAt: true,
+                        IsFirstLogin: true
+                    }
+                },
+                categories: {
+                    select: {
+                        category: true
                     }
                 }
             },

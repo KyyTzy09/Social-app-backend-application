@@ -27,6 +27,29 @@ export class CategoryRepository {
         })
     }
 
+    async findPostCategoriesByPostsId(postIds: string[]) {
+        return await this.prisma.postCategory.findMany({
+            where: {
+                postId: {
+                    in: postIds
+                }
+            },
+            include: {
+                category: true,
+            }
+        })
+    }
+
+    async findAllByIds(ids: string[]) {
+        return await this.prisma.category.findMany({
+            where: {
+                categoryId: {
+                    in: ids
+                }
+            }
+        })
+    }
+
     async createPostCategories(postId: string, categoriesId: string[]) {
         return await this.prisma.postCategory.createMany({
             data: categoriesId.map((id) => ({

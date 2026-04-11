@@ -16,6 +16,17 @@ export class CategoryService {
         return { data: existingCategories, maxPage: Math.ceil(rowCounts / dto.limit) }
     }
 
+    async getPostCategoriesByPostsId(postIds: string[]) {
+        const existingPostCategories = await this.categoryRepo.findPostCategoriesByPostsId(postIds)
+
+        const categoriesId = existingPostCategories.map(category => category.categoryId)
+
+        const uniqueCategoriesId = [...new Set(categoriesId)]
+        const existingCategories = await this.categoryRepo.findAllByIds(uniqueCategoriesId)
+
+        return { postCategories: existingPostCategories, categories: existingCategories }
+    }
+
     async getAllCategories() {
         const existingCategories = await this.categoryRepo.findAll()
         if (existingCategories.length === 0) throw new NotFoundException("Categories not found")
@@ -24,6 +35,7 @@ export class CategoryService {
     }
 
     async createPostCategories(postId: string, categoriesId: string[]) {
-        const createdPostCategories = await this.categoryRepo
-     }
+        const createdPostCategories = await this.categoryRepo.createPostCategories(postId, categoriesId)
+        return { data: createdPostCategories }
+    }
 }
